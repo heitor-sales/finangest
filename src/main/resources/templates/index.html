@@ -3,18 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Principal</title>
-    
+    <title>Página Inicial</title>
 </head>
 <body>
-    <h1>Bem-vindo(a)!</h1>
+    <body>
+    <h1>Bem-vindo(a) ao Finangest!</h1>
     <hr/>
 
-    <p class="welcome-message">Olá, <span th:text="${login}">Usuário</span>!</p>
+    <div th:if="${login != null}">
+        <p class="welcome-message">Olá, <span th:text="${login}">Usuário</span>!</p>
+        <p>Você está logado(a).</p>
+    </div>
 
-    <p>Esta é a sua área restrita. Você fez login com sucesso.</p>
+    <div th:unless="${login != null}">
+        <p>Para acessar todas as funcionalidades, por favor, faça seu login.</p>
+    </div>
 
-    <a href="/logout" class="logout-link">Sair</a>
+    <div class="nav-links">
+        <a th:href="@{/login/form}">Fazer Login</a>
 
+        <a th:href="@{/correntistas/form}">Cadastrar Novo Correntista</a>
+        <a th:href="@{/correntistas/list}">Listar Correntistas</a>
+
+        <a th:if="${login != null}" th:href="@{/logout}" class="logout-link">Sair</a>
+    </div>
+
+    <p style="margin-top: 30px;">Explore suas opções financeiras.</p>
+
+</body>
 </body>
 </html>

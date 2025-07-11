@@ -18,7 +18,7 @@ public class LoginController {
     public String valideLogin(String login, String senha, Model model) {
         if(login.equals("admin") && senha.equals("secret")){
             model.addAttribute("login", login);
-            return "index";
+            return "protegido";
         } else {
             model.addAttribute("erro","login inválido");
             return "form-login";
