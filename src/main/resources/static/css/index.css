@@ -1,36 +1,151 @@
+/* Geral - Resets e fontes */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    color: #212529;
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+   background-image: url('../images/fundo.jpg');
+    background-size: cover; 
+    background-position: center center; 
+    background-repeat: no-repeat; 
+    background-attachment: fixed;
+    color: #343a40; 
+    min-height: 100vh; 
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    padding: 20px; 
+    margin: 0; 
 }
-.container {
-    max-width: 960px;
-    margin-top: 40px;
-    margin-bottom: 40px;
-    padding: 30px;
+
+
+.main-content-container { 
+    max-width: 900px; 
+    width: 100%; 
+    margin: auto; 
+    padding: 40px; 
     background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 12px; 
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15); /
+    animation: fadeIn 0.8s ease-out; 
 }
+
+/* Animação simples de fade-in */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Títulos */
 h1 {
-    color: #0d6efd;
-    margin-bottom: 20px;
+    color: #000000; 
+    margin-bottom: 25px; 
+    text-align: center;
+    font-weight: 600; 
 }
+
+/* Linha horizontal */
 hr {
-    border-top: 1px solid rgba(0,0,0,.1);
-    margin-bottom: 20px;
+    border: 0; 
+    height: 2px; 
+    background-image: linear-gradient(to right, rgba(0, 123, 255, 0), rgba(0, 123, 255, 0.75), rgba(0, 123, 255, 0)); /* Gradiente de cor */
+    margin-bottom: 30px; 
 }
-.welcome-message {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #198754;
-    margin-bottom: 15px;
-}
+
+
+/* Links de Navegação (Botões) */
 .nav-links {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #dee2e6;
+    margin-top: 40px; 
+    padding-top: 25px; 
+    border-top: 1px solid #ced4da; 
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    justify-content: center;
+    gap: 15px; 
+}
+
+/* Sobrescritas para botões Bootstrap para melhor consistência */
+.nav-links a {
+    font-size: 1.05rem; 
+    padding: 12px 25px; 
+    border-radius: 8px; 
+    transition: all 0.3s ease; 
+    text-decoration: none;
+    display: inline-block; 
+}
+
+.nav-links a.btn-primary { /* Específico para o link do botão primário */
+    background-color: #007bff;
+    border: 1px solid #007bff; 
+    color: white; 
+}
+.nav-links a.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.nav-links a.btn-secondary {
+    background-color: #6c757d;
+    border: 1px solid #6c757d;
+    color: white;
+}
+.nav-links a.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.nav-links a.btn-info {
+    background-color: #17a2b8;
+    border: 1px solid #17a2b8;
+    color: white;
+}
+.nav-links a.btn-info:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.nav-links a.btn-danger { /* Específico para o botão de logout */
+    background-color: #dc3545;
+    border: 1px solid #dc3545;
+    color: white;
+}
+.nav-links a.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+
+/* Parágrafo de rodapé */
+.footer-text { /* Usei uma nova classe para o parágrafo de rodapé */
+    text-align: center;
+    margin-top: 40px; 
+    font-size: 0.9em; 
+    color: #6c757d; 
+}
+
+/* Responsividade básica (para telas menores que 768px) */
+@media (max-width: 768px) {
+    .main-content-container {
+        padding: 20px; 
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-links {
+        flex-direction: column; 
+        gap: 10px; 
+    }
+    .nav-links a { 
+        width: 100%; 
+    }
 }

@@ -1,30 +1,143 @@
+/* Geral - Resets e fontes */
 body {
-    font-family: Arial, sans-serif;
-    background-image: url('../images/fundo.jpg');
-    background-size: cover; 
-    background-position: center center; 
-    background-repeat: no-repeat; 
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    background-color: #e9ecef; 
+    background-image: url('../images/fundo.jpg'); 
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
     background-attachment: fixed;
-    color: #212529; 
+    color: #343a40; 
+    min-height: 100vh; 
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    padding: 20px; 
+    margin: 0; 
 }
 
-.container {
-    max-width: 960px; 
-    margin-top: 40px;
-    margin-bottom: 40px; 
-    padding: 30px; 
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+/* Container Principal */
+.main-content-container { /* Renomeei para evitar conflitos com classes do Bootstrap */
+    max-width: 1100px; 
+    width: 100%;
+    margin: auto;
+    padding: 40px;
+    background-color: rgba(255, 255, 255, 0.95); 
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    animation: fadeIn 0.8s ease-out; /* Animação de fade-in */
 }
 
+/* Animação simples de fade-in */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Títulos */
 h1 {
-    color: #0d6efd; 
-    margin-bottom: 20px;
+    color: #000000;
+    margin-bottom: 25px;
     text-align: center;
+    font-weight: 600;
 }
 
+/* Linha horizontal */
 hr {
-    border-top: 1px solid rgba(0,0,0,.1);
+    border: 0;
+    height: 2px;
+    background-image: linear-gradient(to right, rgba(0, 123, 255, 0), rgba(0, 123, 255, 0.75), rgba(0, 123, 255, 0));
+    margin-bottom: 30px;
+}
+
+/* Mensagens de Alerta (Bootstrap já faz a maior parte) */
+.alert {
     margin-bottom: 20px;
+    font-size: 1.1rem;
+    padding: 15px 20px;
+}
+
+/* Estilo para a tabela */
+.table { /* A classe .table do Bootstrap já é excelente, poucos ajustes aqui */
+    margin-bottom: 20px;
+}
+
+.table th, .table td {
+    vertical-align: middle; 
+    padding: 12px; 
+}
+
+.table thead th {
+    font-weight: 600; 
+}
+
+/* Estilo para os botões de ação na tabela e abaixo dela */
+.btn {
+    font-size: 0.95rem; 
+    padding: 8px 15px; 
+    border-radius: 6px; 
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-sm { /* Apenas para garantir que os botões de editar/remover fiquem menores */
+    padding: 6px 10px;
+    font-size: 0.85rem;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Botões de navegação no rodapé */
+.bottom-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; 
+    gap: 15px; 
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #ced4da; 
+}
+
+/* Responsividade */
+@media (max-width: 992px) { 
+    .main-content-container {
+        max-width: 95%; 
+        padding: 30px;
+    }
+}
+
+@media (max-width: 768px) { 
+    .main-content-container {
+        padding: 20px; 
+        margin-top: 20px;
+        margin-bottom: 20px;
+        border-radius: 8px; 
+        box-shadow: none; 
+    }
+    h1 {
+        font-size: 1.8rem; 
+        margin-bottom: 20px;
+    }
+    .table-responsive { /* Bootstrap já cuida da tabela, mas garantimos que o overflow funcione */
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; 
+    }
+    .table th, .table td {
+        white-space: nowrap; /* Evita que o conteúdo da célula quebre linha, forçando a rolagem */
+    }
+    .bottom-buttons {
+        flex-direction: column; /* Botões empilhados em telas pequenas */
+        gap: 10px; /* Espaçamento ajustado */
+    }
+    .bottom-buttons .btn {
+        width: 100%; /* Botões ocupam largura total */
+    }
 }

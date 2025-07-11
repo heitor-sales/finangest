@@ -11,54 +11,57 @@
     <link rel="stylesheet" th:href="@{/css/lista-correntistas.css}">
 </head>
 <body>
-    <div class="container">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <div class="main-content-container"> 
         <h1 class="text-center">Lista de Correntistas</h1>
         <hr/>
 
-        <div th:if="${mensagem != null}" th:classappend="${mensagem.contains('sucesso') ? 'alert-success' : 'alert-danger'}" class="alert" role="alert">
+        <div th:if="${mensagem != null}" th:classappend="${mensagem.contains('sucesso') ? 'alert-success' : 'alert-danger'}" class="alert text-center" role="alert">
             <span th:text="${mensagem}"></span>
         </div>
 
-        <div th:if="${correntistas == null or correntistas.empty}" class="alert alert-warning" role="alert">
+        <div th:if="${correntistas == null or correntistas.empty}" class="alert alert-warning text-center" role="alert">
             Nenhum correntista cadastrado ainda.
         </div>
 
-        <table th:unless="${correntistas == null or correntistas.empty}" class="table table-striped table-hover mt-3">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Admin</th>
-                    <th scope="col">Senha (Parcial)</th>
-                    <th scope="col">Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="correntista : ${correntistas}">
-                    <td>[[${correntista.id}]]</td>
-                    <td th:text="${correntista.nome}"></td>
-                    <td th:text="${correntista.email}"></td>
-                    <td>
-                        <span th:if="${correntista.admin}">Sim</span>
-                        <span th:unless="${correntista.admin}">Não</span>
-                    </td>
-                    <td th:text="${#strings.substring(correntista.senha,0,3)} + '...'"></td>
-                    <td>
-                        <a th:href="@{/correntistas/edit/{id}(id=${correntista.id})}" class="btn btn-sm btn-outline-primary me-2">Editar</a>
-                        <a th:href="@{/correntistas/delete/{id}(id=${correntista.id})}" class="btn btn-sm btn-outline-danger">Remover</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div th:unless="${correntistas == null or correntistas.empty}" class="table-responsive">
+            <table class="table table-striped table-hover mt-3">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Admin</th>
+                        <th scope="col">Senha (Parcial)</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="correntista : ${correntistas}">
+                        <td>[[${correntista.id}]]</td>
+                        <td th:text="${correntista.nome}"></td>
+                        <td th:text="${correntista.email}"></td>
+                        <td>
+                            <span th:if="${correntista.admin}">Sim</span>
+                            <span th:unless="${correntista.admin}">Não</span>
+                        </td>
+                        <td th:text="${#strings.substring(correntista.senha,0,3)} + '...'"></td>
+                        <td>
+                            <a th:href="@{/correntistas/edit/{id}(id=${correntista.id})}" class="btn btn-sm btn-outline-primary me-2">Editar</a>
+                            <a th:href="@{/correntistas/delete/{id}(id=${correntista.id})}" class="btn btn-sm btn-outline-danger">Remover</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-        <div class="mt-4">
-            <a th:href="@{/correntistas/form}" class="btn btn-success me-2">Cadastrar Novo Correntista</a>
+        <div class="bottom-buttons">
+            <a th:href="@{/correntistas/form}" class="btn btn-success">Cadastrar Novo Correntista</a>
             <a th:href="@{/home}" class="btn btn-info">Voltar para Home</a>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
