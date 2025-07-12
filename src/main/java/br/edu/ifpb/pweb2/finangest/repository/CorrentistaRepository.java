@@ -19,11 +19,12 @@ public class CorrentistaRepository {
         return repositorio.get(id);
     }
 
-    public void save(Correntista correntista) {
+    public Correntista save(Correntista correntista) {
         Integer id = null;
         id = (correntista.getId() == null) ? this.getMaxId() + 1 : correntista.getId();
         correntista.setId(id);
         repositorio.put(id, correntista);
+        return correntista;
     }
 
     public List<Correntista> findAll() {
@@ -40,6 +41,11 @@ public class CorrentistaRepository {
                 .max(Comparator.comparing(Correntista::getId))
                 .orElseThrow(NoSuchElementException::new);
         return contaMaxId.getId() == null ? 1 : contaMaxId.getId() + 1;
+    }
+
+    public Correntista findByEmail(String email){
+        return repositorio.values().stream().filter(c -> c.getEmail() != null && c.getEmail().equalsIgnoreCase(email))
+        .findFirst().orElse(null);
     }
 
     

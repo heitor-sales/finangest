@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.edu.ifpb.pweb2.finangest.model.Correntista;
 import br.edu.ifpb.pweb2.finangest.repository.CorrentistaRepository;
@@ -24,7 +25,7 @@ public class CorrentistaController {
     }
 
     @RequestMapping("/save")
-    public String save(Correntista correntista, Model model) {
+    public String save(Correntista correntista, Model model, RedirectAttributes attr) {
 
         // Validação do nome
         if (correntista.getNome() == null || correntista.getNome().trim().isEmpty()) {
@@ -55,8 +56,9 @@ public class CorrentistaController {
 
         // Se passou por todas as validações, salva e lista
         correntistaRepository.save(correntista);
+        attr.addFlashAttribute("mensagem","Correntista inserido com sucesso.");
         model.addAttribute("correntistas", correntistaRepository.findAll());
-        return "correntistas/list";
+        return "redirect:list";
     }
 
     @RequestMapping("/list")

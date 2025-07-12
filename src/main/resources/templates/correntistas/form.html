@@ -18,7 +18,7 @@
         <div th:if="${mensagem != null}" th:classappend="${mensagem.contains('sucesso') ? 'alert-success' : 'alert-danger'}" class="alert" role="alert">
             <span th:text="${mensagem}"></span>
         </div>
-
+        
         <form th:action="@{/correntistas/save}" method="POST" th:object="${correntista}">
             <input type="hidden" th:field="*{id}"> <div class="mb-3">
                 <label for="nome" class="form-label">Nome:</label>

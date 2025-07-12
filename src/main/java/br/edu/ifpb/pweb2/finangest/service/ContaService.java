@@ -14,22 +14,23 @@ public class ContaService implements Service<Conta,Integer> {
     private ContaRepository contaRepository;
     @Autowired
     private CorrentistaRepository correntistaRepository;
-    Override
-public List<Conta> findall() {
-   return contaRepository.findAll();
+
+    @Override
+    public List<Conta> findall() {
+        return contaRepository.findAll();
 }
 
-@Override
-public Conta findByID(Integer id) {
-    return contaRepository.findById(id);
-}
+    @Override
+    public Conta findByID(Integer id) {
+        return contaRepository.findById(id);
+    }
 
-@Override
-public Conta save(Conta conta) {
-    Correntista correntista=correntistaRepository.findById(conta.getCorrentista().getID());
-    conta.setCorrentista(correntista);
-    return contaRepository.save(conta);
-    
+    @Override
+    public Conta save(Conta conta) {
+        Correntista correntista=correntistaRepository.findById(conta.getCorrentista().getId());
+        conta.setCorrentista(correntista);
+        return contaRepository.save(conta);
+        
     
     
    
@@ -40,4 +41,4 @@ public Conta save(Conta conta) {
 
 
 
-}
+
