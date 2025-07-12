@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finangest- cadastro de contas</title>
+</head>
+<body>
+    <h1 class="mb-3">Cadastro de contas</h1>
+    <form th:action="@{/contas/save}" method="POST" th:object="${conta}">
+        <input type="hidden" th:field="*{id}"/>
+        <label for="numero">Número</label>
+        <input type="text" th:field="*{numero}"/><br><br>
+        <label for="correntista">Correntista</label>
+        <select th:field="*{correntista.id}">
+            <option th:each="cor:${correntistaItens}" th:value="${cor.id}" th:label="${cor.nome}"></option>
+        </select>
+        <br><br>
+        <label for="lastName">Data</label>
+        <input type="text" th: field="*{data}"><br><br>
+        <hr>
+        <button type="submit">Salvar</button>
+        <a th:ref="@{/contas/list}">Cancelar</a>
+    </form>
+</body>
+</html>

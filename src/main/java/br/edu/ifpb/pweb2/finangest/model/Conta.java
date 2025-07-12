@@ -27,6 +27,9 @@ public class Conta implements Serializable {
     private Set<Transacao> transacoes = new HashSet<Transacao>();
 
     private Correntista correntista;
+    public Conta(Correntista correntista){
+        this.correntista=correntista;
+    }
 
     public BigDecimal getSaldo() {
         BigDecimal total = BigDecimal.ZERO;

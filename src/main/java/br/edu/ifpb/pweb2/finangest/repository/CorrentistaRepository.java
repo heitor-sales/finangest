@@ -42,4 +42,6 @@ public class CorrentistaRepository {
         return contaMaxId.getId() == null ? 1 : contaMaxId.getId() + 1;
     }
 
+    
+
 }
