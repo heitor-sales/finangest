@@ -1,151 +1,109 @@
-/* Geral - Resets e fontes */
+/* Estilos gerais do corpo da página */
 body {
-    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-   background-image: url('../images/fundo.jpg');
-    background-size: cover; 
-    background-position: center center; 
-    background-repeat: no-repeat; 
-    background-attachment: fixed;
-    color: #343a40; 
-    min-height: 100vh; 
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-    padding: 20px; 
-    margin: 0; 
+    background-color: #f8f9fa; /* Cor de fundo suave */
+    color: #343a40; /* Cor de texto principal */
+    font-family: -apple-system, BlinkMacSyste, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-
-.main-content-container { 
-    max-width: 900px; 
-    width: 100%; 
-    margin: auto; 
-    padding: 40px; 
-    background-color: #ffffff;
-    border-radius: 12px; 
-    box-shadow: 0 8px 16px rgba(0,0,0,0.15); /
-    animation: fadeIn 0.8s ease-out; 
+/* Estilo para a barra de navegação (cabeçalho) */
+.navbar {
+    background-color: #343a40; /* Cor escura de fundo para o cabeçalho */
+    padding: 1rem;
 }
 
-/* Animação simples de fade-in */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Estilo para o nome do site (marca) no cabeçalho */
+.navbar-brand {
+    color: #ffffff;
+    font-weight: 600;
 }
 
-/* Títulos */
-h1 {
-    color: #000000; 
-    margin-bottom: 25px; 
-    text-align: center;
-    font-weight: 600; 
+/* Estilo para os links de navegação */
+.nav-link {
+    color: rgba(255, 255, 255, 0.7); /* Cor do link */
+    font-weight: 500;
+    transition: color 0.3s ease;
 }
 
-/* Linha horizontal */
-hr {
-    border: 0; 
-    height: 2px; 
-    background-image: linear-gradient(to right, rgba(0, 123, 255, 0), rgba(0, 123, 255, 0.75), rgba(0, 123, 255, 0)); /* Gradiente de cor */
-    margin-bottom: 30px; 
+.nav-link:hover {
+    color: #ffffff; /* Cor do link ao passar o mouse */
 }
 
-
-/* Links de Navegação (Botões) */
-.nav-links {
-    margin-top: 40px; 
-    padding-top: 25px; 
-    border-top: 1px solid #ced4da; 
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px; 
+/* Estilo para o nome do usuário logado no cabeçalho */
+.navbar-nav span {
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    align-self: center; /* Alinha o texto no centro */
 }
 
-/* Sobrescritas para botões Bootstrap para melhor consistência */
-.nav-links a {
-    font-size: 1.05rem; 
-    padding: 12px 25px; 
-    border-radius: 8px; 
-    transition: all 0.3s ease; 
-    text-decoration: none;
-    display: inline-block; 
+/* Estilo para o botão "Sair" */
+.logout-button {
+    /* Posicionamento */
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000; /* Garante que o botão fique na frente de outros elementos */
+
+    /* Estilo básico para o botão */
+    background-color: transparent;
+    border: 2px solid #dc3545;
+    color: #dc3545;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none; /* Caso seja uma tag <a> */
 }
 
-.nav-links a.btn-primary { /* Específico para o link do botão primário */
-    background-color: #007bff;
-    border: 1px solid #007bff; 
-    color: white; 
-}
-.nav-links a.btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.nav-links a.btn-secondary {
-    background-color: #6c757d;
-    border: 1px solid #6c757d;
-    color: white;
-}
-.nav-links a.btn-secondary:hover {
-    background-color: #5a6268;
-    border-color: #545b62;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.nav-links a.btn-info {
-    background-color: #17a2b8;
-    border: 1px solid #17a2b8;
-    color: white;
-}
-.nav-links a.btn-info:hover {
-    background-color: #138496;
-    border-color: #117a8b;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.nav-links a.btn-danger { /* Específico para o botão de logout */
+.logout-button:hover {
+    
     background-color: #dc3545;
-    border: 1px solid #dc3545;
-    color: white;
-}
-.nav-links a.btn-danger:hover {
-    background-color: #c82333;
-    border-color: #bd2130;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    color: #ffffff;
 }
 
+/* Estilo para o contêiner principal da página */
+.main-content-container {
+    max-width: 900px;
+    margin: 3rem auto; /* Centraliza e adiciona espaço vertical */
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-/* Parágrafo de rodapé */
-.footer-text { /* Usei uma nova classe para o parágrafo de rodapé */
+/* Estilo para o título */
+h1 {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+/* Estilo para a linha horizontal */
+hr {
+    border-top: 2px solid #e9ecef;
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Estilo para o contêiner dos links principais */
+.nav-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Estilo para o texto do rodapé */
+.footer-text {
     text-align: center;
-    margin-top: 40px; 
-    font-size: 0.9em; 
-    color: #6c757d; 
+    color: #6c757d;
+    font-style: italic;
+    margin-top: 3rem;
 }
 
-/* Responsividade básica (para telas menores que 768px) */
-@media (max-width: 768px) {
-    .main-content-container {
-        padding: 20px; 
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-    .nav-links {
-        flex-direction: column; 
-        gap: 10px; 
-    }
-    .nav-links a { 
-        width: 100%; 
-    }
+.user-email {
+    color: #ffffff;
+    font-weight: 500;
 }

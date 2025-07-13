@@ -2,11 +2,7 @@
 body {
     font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
     background-color: #e9ecef; 
-    background-image: url('../images/fundo.jpg'); 
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    
     color: #343a40; 
     min-height: 100vh; 
     display: flex; 

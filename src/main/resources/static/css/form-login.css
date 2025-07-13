@@ -1,11 +1,7 @@
 body {
     font-family: Arial, sans-serif;
-    background-image: url('../images/fundo.jpg');
-    background-size: cover; 
-    background-position: center center; 
-    background-repeat: no-repeat; 
-    background-attachment: fixed;
-    color: #212529; 
+    background-color: #d9dadb;
+    color: #ffffff; 
     display: flex; 
     justify-content: center; 
     align-items: center; 
@@ -15,14 +11,14 @@ body {
 .login-container {
     max-width: 400px;
     padding: 30px;
-    background-color: #ffffff;
+    background-color: #050505;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     width: 100%;
 }
 
 h1 {
-    color: #000000; 
+    color: #ffffff; 
     margin-bottom: 20px;
     text-align: center;
 }

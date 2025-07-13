@@ -31,7 +31,7 @@ public class LoginController {
     public ModelAndView valideLogin(Correntista c, HttpSession session, ModelAndView model, RedirectAttributes ratt) {
         if((c = this.isValido(c)) != null){
             session.setAttribute("usuario", c);
-            model.setViewName("protegido");
+            model.setViewName("index");
             return model;
         } else {
             ratt.addFlashAttribute("mensagem", "Login e/ou senha inválidos!");
