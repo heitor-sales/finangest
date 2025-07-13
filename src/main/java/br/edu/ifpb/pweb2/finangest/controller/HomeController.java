@@ -8,6 +8,6 @@ public class HomeController {
 
     @RequestMapping("/")
     public String showHomepage() {
-        return "form-login";
+        return "index";
     }
 }

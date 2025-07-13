@@ -30,6 +30,7 @@
             <a class="nav-link" th:href="@{/contas}">Contas</a>
         </li>
         <li class="nav-item">
+            <li class="nav-item" th:if="${session.usuario != null and session.usuario.admin}">
             <a class="nav-link" th:href="@{/correntistas/form}">Correntistas</a>
         </li>
         <li class="nav-item">
@@ -41,6 +42,10 @@
         <span class="user-email me-3" th:text="${session.usuario.email}"></span>
         <a class="btn btn-danger" th:href="@{/login/logout}">Sair</a>
     </div>
+    <div th:unless="${session.usuario != null}">
+    <a class="btn btn-primary" th:href="@{/login/form}">Fazer Login</a>
+    <a class="btn btn-secondary" th:href="@{/correntistas/form}">Cadastrar-se</a>
+</div>
 
 </div>
     </div>
