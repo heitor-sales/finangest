@@ -5,16 +5,36 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 // import java.util.Date;
 
+import org.hibernate.annotations.ManyToAny;
+import org.springframework.format.annotation.NumberFormat;
+
+import jakarta.annotation.Generated;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(exclude = "conta")
+@Entity
 public class Transacao implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String descricao; //ex: “Pagamento do curso de desenho”
 
+    @NumberFormat(pattern = "###,##0.00")
     private BigDecimal valor;
 
     private String movimento; //crédito ou débito
@@ -25,6 +45,8 @@ public class Transacao implements Serializable {
 
     private Categoria categoria; //Salário, Invetimento, Saúde e Remédios e etc.
 
+    @ManyToOne
+    @JoinColumn(name = "id_conta")
     private Conta conta;
 
     // @Override
