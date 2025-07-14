@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finangest-cadastro de transações</title>
+</head>
+<body>
+    
+    <form th:action="@{'/correntistas/' + ${correntistaId} + '/contas/' + ${transacao.conta.id} + '/transacoes'}"
+          th:object="${transacao}" method="post">
+
+        <label>Valor:</label>
+        <input type="number" step="0.01" th:field="*{valor}" required /><br/>
+
+        <label>Descrição:</label>
+        <input type="text" th:field="*{descricao}" required /><br/>
+
+        <button type="submit">Salvar</button>
+    </form>
+
+    <a th:href="@{'/correntistas/' + ${correntistaId} + '/contas'}">Voltar</a>
+</body>
+</html>
+
+    
+</body>
+</html>

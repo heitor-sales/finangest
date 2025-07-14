@@ -7,9 +7,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import br.edu.ifpb.pweb2.finangest.Util.PasswordUtil;
+import  br.edu.ifpb.pweb2.finangest.Util.PasswordUtil;
+import br.edu.ifpb.pweb2.finangest.model.Conta;
 import br.edu.ifpb.pweb2.finangest.model.Correntista;
+import br.edu.ifpb.pweb2.finangest.repository.ContaRepository;
 import br.edu.ifpb.pweb2.finangest.repository.CorrentistaRepository;
+
 
 @Controller
 @RequestMapping("/correntistas")
@@ -17,6 +20,8 @@ public class CorrentistaController {
 
     @Autowired
     private CorrentistaRepository correntistaRepository;
+    @Autowired
+    private ContaRepository contaRepository;
 
     @RequestMapping("/form")
     public String getForm(Correntista correntista, Model model) {
@@ -75,4 +80,29 @@ public class CorrentistaController {
         model.addAttribute("correntista", correntistaRepository.findById(id));
         return "correntistas/form";
     }
+    @RequestMapping("/{id}/conta/form")
+public String getContaForm(@PathVariable("id") Integer correntistaId, Model model) {
+    Conta conta = new Conta();
+    conta.setCorrentista(correntistaRepository.findById(correntistaId).orElse(null));
+    model.addAttribute("conta", conta);
+    return "contas/form"; // esse será o formulário de criação de conta
+}
+
+@RequestMapping("/{id}/conta/save")
+public String salvarConta(@PathVariable("id") Integer correntistaId, Conta conta, RedirectAttributes attr) {
+    Correntista correntista = correntistaRepository.findById(correntistaId).orElse(null);
+    if (correntista == null) {
+        attr.addFlashAttribute("mensagem", "Correntista não encontrado.");
+        return "redirect:/correntistas/list";
+    }
+
+    conta.setCorrentista(correntista);
+    contaRepository.save(conta);
+
+    attr.addFlashAttribute("mensagem", "Conta criada com sucesso.");
+    return "redirect:/correntistas/" + correntistaId;
+}
+
+   
+    
 }
