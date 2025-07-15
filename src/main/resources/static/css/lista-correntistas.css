@@ -1,24 +1,22 @@
 /* Geral - Resets e fontes */
 body {
     font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-    background-color: #e9ecef; 
-    
-    color: #343a40; 
-    min-height: 100vh; 
-    display: flex; 
-    justify-content: center;
-    align-items: center;
-    padding: 20px; 
-    margin: 0; 
+    background-color: #e9ecef;
+    color: #343a40;
+    min-height: 100vh;
+    /* REMOVIDO: display: flex, justify-content: center, align-items: center */
+    /* Estas propriedades estavam centralizando todo o conteúdo do body, incluindo o cabeçalho. */
+    padding: 0; /* Ajustado para 0 para evitar padding extra que interfere no layout total */
+    margin: 0;
 }
 
 /* Container Principal */
-.main-content-container { /* Renomeei para evitar conflitos com classes do Bootstrap */
-    max-width: 1100px; 
+.main-content-container {
+    max-width: 1100px;
     width: 100%;
-    margin: auto;
+    margin: 3rem auto; /* Adicionado margem superior para afastar do cabeçalho */
     padding: 40px;
-    background-color: rgba(255, 255, 255, 0.95); 
+    background-color: rgba(255, 255, 255, 0.95);
     border-radius: 12px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.15);
     animation: fadeIn 0.8s ease-out; /* Animação de fade-in */
@@ -60,28 +58,28 @@ hr {
 }
 
 /* Estilo para a tabela */
-.table { /* A classe .table do Bootstrap já é excelente, poucos ajustes aqui */
+.table {
     margin-bottom: 20px;
 }
 
 .table th, .table td {
-    vertical-align: middle; 
-    padding: 12px; 
+    vertical-align: middle;
+    padding: 12px;
 }
 
 .table thead th {
-    font-weight: 600; 
+    font-weight: 600;
 }
 
 /* Estilo para os botões de ação na tabela e abaixo dela */
 .btn {
-    font-size: 0.95rem; 
-    padding: 8px 15px; 
-    border-radius: 6px; 
+    font-size: 0.95rem;
+    padding: 8px 15px;
+    border-radius: 6px;
     transition: all 0.2s ease-in-out;
 }
 
-.btn-sm { /* Apenas para garantir que os botões de editar/remover fiquem menores */
+.btn-sm {
     padding: 6px 10px;
     font-size: 0.85rem;
 }
@@ -95,45 +93,45 @@ hr {
 .bottom-buttons {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; 
-    gap: 15px; 
+    justify-content: center;
+    gap: 15px;
     margin-top: 30px;
     padding-top: 20px;
-    border-top: 1px solid #ced4da; 
+    border-top: 1px solid #ced4da;
 }
 
 /* Responsividade */
-@media (max-width: 992px) { 
+@media (max-width: 992px) {
     .main-content-container {
-        max-width: 95%; 
+        max-width: 95%;
         padding: 30px;
     }
 }
 
-@media (max-width: 768px) { 
+@media (max-width: 768px) {
     .main-content-container {
-        padding: 20px; 
+        padding: 20px;
         margin-top: 20px;
         margin-bottom: 20px;
-        border-radius: 8px; 
-        box-shadow: none; 
+        border-radius: 8px;
+        box-shadow: none;
     }
     h1 {
-        font-size: 1.8rem; 
+        font-size: 1.8rem;
         margin-bottom: 20px;
     }
-    .table-responsive { /* Bootstrap já cuida da tabela, mas garantimos que o overflow funcione */
+    .table-responsive {
         overflow-x: auto;
-        -webkit-overflow-scrolling: touch; 
+        -webkit-overflow-scrolling: touch;
     }
     .table th, .table td {
-        white-space: nowrap; /* Evita que o conteúdo da célula quebre linha, forçando a rolagem */
+        white-space: nowrap;
     }
     .bottom-buttons {
-        flex-direction: column; /* Botões empilhados em telas pequenas */
-        gap: 10px; /* Espaçamento ajustado */
+        flex-direction: column;
+        gap: 10px;
     }
     .bottom-buttons .btn {
-        width: 100%; /* Botões ocupam largura total */
+        width: 100%;
     }
 }

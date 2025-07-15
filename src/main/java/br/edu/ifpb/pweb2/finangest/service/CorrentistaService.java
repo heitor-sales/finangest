@@ -30,7 +30,10 @@ public class CorrentistaService implements Service<Correntista, Integer>{
         c.setSenha(PasswordUtil.hashPassword(c.getSenha()));
        return correntistaRepository.save(c);
     }
+
+    @Override
+    public void deleteById(Integer id) {
+        correntistaRepository.deleteById(id);
+    }
     
 }
-
-

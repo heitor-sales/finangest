@@ -27,7 +27,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-            <a class="nav-link" th:href="@{/contas}">Contas</a>
+            <a class="nav-link" th:href="@{/contas/list}">Contas</a>
         </li>
         <li class="nav-item">
             <li class="nav-item" th:if="${session.usuario != null and session.usuario.admin}">
@@ -39,7 +39,7 @@
     </ul>
 
     <div class="d-flex align-items-center" th:if="${session.usuario != null}">
-        <span class="user-email me-3" th:text="${session.usuario.email}"></span>
+        <span class="user-email me-3" th:text="${session.usuario.nome}"></span>
         <a class="btn btn-danger" th:href="@{/login/logout}">Sair</a>
     </div>
     <div th:unless="${session.usuario != null}">

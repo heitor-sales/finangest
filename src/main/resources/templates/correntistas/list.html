@@ -9,10 +9,12 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <link rel="stylesheet" th:href="@{/css/lista-correntistas.css}">
-</head>
+    <link rel="stylesheet" th:href="@{/css/cabecalho.css}"> </head>
 <body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <div th:insert="~{cabecalho}"></div>
 
     <div class="main-content-container"> 
         <h1 class="text-center">Lista de Correntistas</h1>
@@ -52,6 +54,9 @@
                             <a th:href="@{/correntistas/edit/{id}(id=${correntista.id})}" class="btn btn-sm btn-outline-primary me-2">Editar</a>
                             <a th:href="@{/correntistas/delete/{id}(id=${correntista.id})}" class="btn btn-sm btn-outline-danger">Remover</a>
                         </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(correntistas)}">
+                        <td colspan="8" class="text-center">Nenhum correntista cadastrado.</td>
                     </tr>
                 </tbody>
             </table>

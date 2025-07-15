@@ -1,8 +1,5 @@
 package br.edu.ifpb.pweb2.finangest.model;
 
-import java.io.Serializable;
-import java.util.List;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,21 +12,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Correntista implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class Comentario {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
-    private String nome;
-
-    private String email;
-
-    private String senha;
-
-    private boolean admin;
-
-    private List<Conta> contas;
+    private String texto;
 
 }

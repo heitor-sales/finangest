@@ -10,4 +10,6 @@ public interface Service<T,ID>{
     
     public T save(T t);
 
+    public void deleteById(Integer id);
+
 }
