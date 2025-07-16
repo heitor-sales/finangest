@@ -15,6 +15,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
+import org.springframework.ui.Model;
 @Controller
 @RequestMapping("/transacoes")
 public class TransacaoController {
@@ -66,29 +69,52 @@ public class TransacaoController {
 
     // Método para salvar uma transação (POST do formulário)
     @PostMapping("/save")
-    public ModelAndView saveTransacao(@ModelAttribute Transacao transacao, ModelAndView modelAndView, RedirectAttributes redirectAttributes) {
-        // Validação da Conta
+    public String saveTransacao(@Valid @ModelAttribute("transacao") Transacao transacao,
+                                BindingResult result, // Adicione BindingResult aqui
+                                Model model, // Adicione Model aqui para usar addAttribute ao retornar a view
+                                RedirectAttributes redirectAttributes) {
+
+        // --- INÍCIO DA VALIDAÇÃO DO SPRING VALIDATION ---
+        if (result.hasErrors()) {
+            // Se houver erros de validação (incluindo o @Size do Comentario),
+            // retorne para o formulário para exibir os erros ao usuário.
+            // É importante adicionar novamente os dados que o formulário precisa.
+            model.addAttribute("categoriaItems", categoriaRepository.findAll());
+            // Se a transação já tem uma conta, passamos ela para que o form se preencha
+            // Caso contrário, passamos uma nova Conta vazia para evitar NPE.
+            if (transacao.getConta() == null) {
+                transacao.setConta(new Conta());
+            }
+            // Garante que o objeto Comentario não seja nulo se o erro for dele
+            if (transacao.getComentario() == null) {
+                transacao.setComentario(new Comentario());
+            }
+            return "transacoes/form"; // Retorna para o template do formulário
+        }
+        // --- FIM DA VALIDAÇÃO DO SPRING VALIDATION ---
+
+        // As validações de Conta e Categoria que você já tinha podem ser mantidas,
+        // mas considere se algumas delas podem ser expressas com anotações de validação
+        // para maior consistência.
+
+        // Validação da Conta (mantida, mas pode ser complementada com @NotNull ou @Valid na Transacao)
         if (transacao.getConta() == null || transacao.getConta().getId() == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "A transação deve ser associada a uma conta válida.");
-            modelAndView.setViewName("redirect:/transacoes/form"); // Retorna para o formulário se não houver conta
-            return modelAndView;
+            return "redirect:/transacoes/form";
         }
 
         // Busca a entidade Conta completa do banco de dados
         Optional<Conta> contaOpt = contaRepository.findById(transacao.getConta().getId());
         if (contaOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute("errorMessage", "Conta não encontrada para a transação.");
-            modelAndView.setViewName("redirect:/contas/list");
-            return modelAndView;
+            return "redirect:/contas/list";
         }
         transacao.setConta(contaOpt.get()); // Associa a entidade Conta completa à transação
 
-        // Validação da Categoria
+        // Validação da Categoria (mantida, mas pode ser complementada com @NotNull ou @Valid na Transacao)
         if (transacao.getCategoria() == null || transacao.getCategoria().getId() == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Selecione uma categoria para a transação.");
-            // Retorna para o formulário, mantendo o ID da conta
-            modelAndView.setViewName("redirect:/transacoes/form?contaId=" + transacao.getConta().getId());
-            return modelAndView;
+            return "redirect:/transacoes/form?contaId=" + transacao.getConta().getId();
         }
 
         // Busca a entidade Categoria completa do banco de dados
@@ -98,7 +124,10 @@ public class TransacaoController {
                 () -> {
                     // Categoria não encontrada, isso não deveria acontecer se o select é preenchido do banco
                     redirectAttributes.addFlashAttribute("errorMessage", "Categoria não encontrada para a transação.");
-                    modelAndView.setViewName("redirect:/transacoes/form?contaId=" + transacao.getConta().getId());
+                    // Usamos model.addAttribute e retornamos para a view diretamente
+                    // para manter o estado do formulário se o erro não for de redirect
+                    model.addAttribute("categoriaItems", categoriaRepository.findAll());
+                    return; // Retorna para sair do lambda e continuar para o save, que pode lançar exceção ou ser evitado
                 }
             );
 
@@ -111,13 +140,11 @@ public class TransacaoController {
             // Não precisamos buscar o Comentario aqui se o CascadeType.ALL está em Transacao.
         }
 
-
         transacaoRepository.save(transacao); // Salva a transação (e o comentário, se houver, devido ao CascadeType.ALL)
         redirectAttributes.addFlashAttribute("successMessage", "Transação salva com sucesso!");
 
         // Redireciona de volta para o extrato da conta à qual a transação foi registrada
-        modelAndView.setViewName("redirect:/contas/" + transacao.getConta().getId() + "/extrato");
-        return modelAndView;
+        return "redirect:/contas/" + transacao.getConta().getId() + "/extrato";
     }
 
     // Método para exibir o formulário de edição de transação

@@ -8,9 +8,11 @@ import java.util.Set;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,6 +41,7 @@ public class Conta implements Serializable {
 
     private Integer diaFechamento; //apenas para tipo == cartão
 
+    @OneToMany(mappedBy = "conta", fetch = FetchType.EAGER)
     private Set<Transacao> transacoes = new HashSet<Transacao>();
 
     private Correntista correntista;
@@ -47,10 +50,28 @@ public class Conta implements Serializable {
         this.correntista=correntista;
     }
 
+    // public BigDecimal getSaldo() {
+    //     BigDecimal total = BigDecimal.ZERO;
+    //     for (Transacao t : this.transacoes) {
+    //         total = total.add(t.getValor());
+    //     }
+    //     return total;
+    // }
+
     public BigDecimal getSaldo() {
         BigDecimal total = BigDecimal.ZERO;
-        for (Transacao t : this.transacoes) {
-            total = total.add(t.getValor());
+        if (this.transacoes != null) {
+            for (Transacao t : this.transacoes) {
+                // Se a transação for de CRÉDITO, adiciona ao total
+                if (t.getMovimento() == TipoMovimento.CREDITO) {
+                    total = total.add(t.getValor());
+                } 
+                // Se a transação for de DÉBITO, subtrai do total
+                else if (t.getMovimento() == TipoMovimento.DEBITO) {
+                    total = total.subtract(t.getValor());
+                }
+                // Adicione outras condições se houver outros tipos de movimento
+            }
         }
         return total;
     }

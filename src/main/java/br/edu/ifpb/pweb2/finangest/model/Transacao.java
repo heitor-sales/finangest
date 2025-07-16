@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.NumberFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -43,7 +44,7 @@ public class Transacao implements Serializable {
 
     // private String movimento; //crédito ou débito
 
-    @OneToOne(optional = true) // 'optional = true' permite que o 'comentario' seja nulo
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "comentario_id", unique = true)
     private Comentario comentario; //usado para melhor descrever as transações, mas não é obrigatório
     

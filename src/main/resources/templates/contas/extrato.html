@@ -9,6 +9,7 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <link rel="stylesheet" th:href="@{/css/cabecalho.css}">
+    <link rel="stylesheet" th:href="@{/css/extrato-custom.css}"> 
 </head>
 <body>
 
@@ -19,7 +20,16 @@
 
     <div class="mb-3">
         <p><strong><span th:text="${conta?.correntista?.nome ?: 'N/A'}"></span></strong></p>
-        <p>Tipo da Conta: <span th:text="${conta?.tipo?.descricao ?: 'N/A'}"></span></p>
+        
+        <p><strong>Tipo da Conta:</strong> <span th:text="${conta?.tipo?.descricao ?: 'N/A'}"></span></p>
+        <p><strong>Número da Conta:</strong> <span th:text="${conta?.numero ?: 'N/A'}"></span></p>
+        <p><strong>Descrição:</strong> <span th:text="${conta?.descricao ?: 'N/A'}"></span></p>
+        
+        <p th:if="${conta?.tipo?.equals(T(br.edu.ifpb.pweb2.finangest.model.TipoConta).CARTAO_CREDITO)}">
+            <strong>Dia do Fechamento:</strong> <span th:text="${conta?.diaFechamento ?: 'N/A'}"></span>
+        </p>
+
+        <p><strong>Saldo:</strong> <span th:text="${#numbers.formatCurrency(saldoFinal)}"></span></p>
     </div>
 
     <div class="card mb-4">
@@ -69,24 +79,36 @@
         <tr>
             <th>DATA</th>
             <th>CATEGORIA</th>
+            <th>NATUREZA</th>
+            <th>ORDEM</th>
             <th>DESCRIÇÃO</th>
-            <th>COMENTÁRIO</th> <th>VALOR</th>
+            <th>COMENTÁRIO</th>
+            <th>MOVIMENTO</th> 
+            <th>VALOR</th>
             <th>SALDO</th>
             <th>OPERAÇÕES</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
+        <tr class="table-primary"> 
             <td colspan="4"><strong>Saldo Inicial</strong></td>
-            <td th:text="${#numbers.formatCurrency(saldoInicial)}"></td>
+            <td></td> <td></td> <td></td> <td th:text="${#numbers.formatCurrency(saldoInicial)}"></td>
             <td></td>
-            <td></td> </tr>
+            <td></td>
+        </tr>
         <tr th:each="transacao : ${transacoes}">
-            <td th:text="${#dates.format(transacao.data, 'dd/MM/yyyy')}"></td>
+            <td th:text="${#temporals.format(transacao.data, 'dd/MM/yyyy')}"></td>
             <td th:text="${transacao.categoria?.nome ?: 'N/A'}"></td>
+            <td th:text="${transacao.categoria?.natureza?.descricao ?: 'N/A'}"
+                th:classappend="${transacao.categoria?.natureza?.equals(T(br.edu.ifpb.pweb2.finangest.model.NaturezaCategoria).SAIDA) ? 'text-danger' : (transacao.categoria?.natureza?.equals(T(br.edu.ifpb.pweb2.finangest.model.NaturezaCategoria).ENTRADA) ? 'text-success' : 'text-info')}">
+            </td>
+            <td th:text="${transacao.categoria?.ordem ?: 'N/A'}"></td>
             <td th:text="${transacao.descricao}"></td>
             <td th:text="${transacao.comentario?.texto != null ? (#strings.length(transacao.comentario.texto) > 50 ? #strings.substring(transacao.comentario.texto, 0, 50) + '...' : transacao.comentario.texto) : ''}"></td>
-            <td th:class="${transacao.movimento == T(br.edu.ifpb.pweb2.finangest.model.TipoMovimento).DEBITO ? 'text-danger' : 'text-success'}"
+            <td th:text="${transacao.movimento.descricao}"
+                th:class="${transacao.movimento.equals(T(br.edu.ifpb.pweb2.finangest.model.TipoMovimento).DEBITO) ? 'text-danger fw-bold' : 'text-success fw-bold'}">
+            </td>
+            <td th:class="${transacao.movimento.equals(T(br.edu.ifpb.pweb2.finangest.model.TipoMovimento).DEBITO) ? 'text-danger' : 'text-success'}"
                 th:text="${#numbers.formatCurrency(transacao.valor)}"></td>
             <td th:text="${#numbers.formatCurrency(transacao.saldoParcial)}"></td>
             <td>
@@ -95,12 +117,14 @@
             </td>
         </tr>
         <tr th:if="${#lists.isEmpty(transacoes)}">
-            <td colspan="7" class="text-center">Nenhuma transação encontrada para este período.</td> </tr>
-        <tr>
+            <td colspan="10" class="text-center">Nenhuma transação encontrada para este período.</td>
+        </tr>
+        <tr class="table-primary">
             <td colspan="4"><strong>Saldo Final</strong></td>
-            <td th:text="${#numbers.formatCurrency(saldoFinal)}"></td>
+            <td></td> <td></td> <td></td> <td th:text="${#numbers.formatCurrency(saldoFinal)}"></td>
             <td></td>
-            <td></td> </tr>
+            <td></td>
+        </tr>
         </tbody>
     </table>
 

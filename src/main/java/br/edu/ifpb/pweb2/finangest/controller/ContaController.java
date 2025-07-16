@@ -1,12 +1,12 @@
 package br.edu.ifpb.pweb2.finangest.controller;
 
 import java.util.List;
-import java.util.Optional; // Importe java.util.Optional
+import java.util.Optional;
 import java.math.BigDecimal;
-import java.time.LocalDate; // Importe java.time.LocalDate
-import java.time.YearMonth; // Importe java.time.YearMonth
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Collections;
-import java.util.Comparator; // Importe java.util.Comparator
+import java.util.Comparator;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import br.edu.ifpb.pweb2.finangest.service.ContaService;
-import org.springframework.ui.Model; // *** CORRIGIDO: Importe o Model correto do Spring ***
+import org.springframework.ui.Model;
 import br.edu.ifpb.pweb2.finangest.model.Conta;
 import br.edu.ifpb.pweb2.finangest.model.Correntista;
 import br.edu.ifpb.pweb2.finangest.model.TipoMovimento;
 import br.edu.ifpb.pweb2.finangest.model.Transacao;
 import br.edu.ifpb.pweb2.finangest.repository.CorrentistaRepository;
-import br.edu.ifpb.pweb2.finangest.repository.TransacaoRepository; // Importe TransacaoRepository
+import br.edu.ifpb.pweb2.finangest.repository.TransacaoRepository;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class ContaController {
     @Autowired
     private CorrentistaRepository correntistaRepository;
 
-    @Autowired // *** Correção: Certifique-se que TransacaoRepository está injetado aqui ***
+    @Autowired
     private TransacaoRepository transacaoRepository;
 
     @RequestMapping("/form")
