@@ -22,6 +22,9 @@ public class ContaService implements Service<Conta,Integer> {
     public List<Conta> findall() {
         return contaRepository.findAll();
 }
+    public List<Conta> findByCorrentista(Correntista correntista) {
+            return contaRepository.findByCorrentista(correntista);
+        }
 
     @Override
     public Conta findByID(Integer id) {

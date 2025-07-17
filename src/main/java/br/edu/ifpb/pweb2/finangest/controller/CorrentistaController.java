@@ -64,9 +64,9 @@ public class CorrentistaController {
         // Se passou por todas as validações, salva e lista
         
         correntistaRepository.save(correntista);
-        attr.addFlashAttribute("mensagem","Correntista inserido com sucesso.");
+        //attr.addFlashAttribute("mensagem","Correntista inserido com sucesso");
         model.addAttribute("correntistas", correntistaRepository.findAll());
-        return "redirect:list";
+        return "redirect:/correntistas/list";
     }
 
     @RequestMapping("/list")

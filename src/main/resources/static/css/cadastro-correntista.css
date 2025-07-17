@@ -1,8 +1,8 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f8f9fa;
-    color: #ffffff;
-    /* padding-top: 56px; Altura padrão da navbar do Bootstrap 5. Ajuste se sua navbar tiver altura diferente. */
+    color: #f3f3f3;
+    /* padding-top: 56px;  */
     margin: 0;
 }
 
@@ -11,7 +11,7 @@ body {
     margin-top: 80px;
     margin-bottom: 40px;
     padding: 30px;
-    background-color: #020202;
+    background-color: #000000;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(228, 228, 228, 0.1);
 }
@@ -25,4 +25,7 @@ h1 {
 hr {
     border-top: 1px solid rgba(0,0,0,.1);
     margin-bottom: 20px;
+}
+.form-label{
+    color: #f3f3f3;
 }

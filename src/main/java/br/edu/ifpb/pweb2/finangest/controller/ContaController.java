@@ -8,14 +8,15 @@ import java.time.YearMonth;
 import java.util.Collections;
 import java.util.Comparator;
 
+import jakarta.servlet.http.HttpSession; 
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 import br.edu.ifpb.pweb2.finangest.service.ContaService;
-import org.springframework.ui.Model;
+import org.springframework.ui.Model; 
 import br.edu.ifpb.pweb2.finangest.model.Conta;
 import br.edu.ifpb.pweb2.finangest.model.Correntista;
 import br.edu.ifpb.pweb2.finangest.model.TipoMovimento;
@@ -25,7 +26,7 @@ import br.edu.ifpb.pweb2.finangest.repository.TransacaoRepository;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes; 
 
 @Controller
 @RequestMapping("/contas")
@@ -35,41 +36,93 @@ public class ContaController {
     private ContaService contaService;
 
     @Autowired
-    private CorrentistaRepository correntistaRepository;
+    private CorrentistaRepository correntistaRepository; 
 
     @Autowired
     private TransacaoRepository transacaoRepository;
 
-    @RequestMapping("/form")
-    public ModelAndView getForm(ModelAndView modelAndView){
-        modelAndView.setViewName("/contas/form");
-        modelAndView.addObject("conta", new Conta(new Correntista()));
-        return modelAndView;
-    }
+    // Modificado para usar Model e HttpSession para verificar o admin
+    @GetMapping("/form")
+public String getForm(Model model, HttpSession session) {
+    model.addAttribute("conta", new Conta());
 
-    @ModelAttribute("correntistaItems")
-    public List<Correntista> getCorrentistas(){
+    Correntista usuarioLogado = (Correntista) session.getAttribute("usuario");
+    if (usuarioLogado != null && usuarioLogado.isAdmin()) {
+        model.addAttribute("correntistaItems", correntistaRepository.findAll());
+    }
+    return "contas/form"; 
+}
+
+    // Este @ModelAttribute não é mais necessário aqui, pois a lista de correntistas
+    // será adicionada condicionalmente no método getForm().
+    // @ModelAttribute("correntistaItems")
+    // public List<Correntista> getCorrentistas(){
+    //     try {
+    //         return correntistaRepository.findAll();
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         return Collections.emptyList();
+    //     }
+    // }
+
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public String adicioneOuAtualizeConta(@ModelAttribute("conta") Conta conta,HttpSession session,RedirectAttributes ra) {
+        Correntista usuarioLogado = (Correntista) session.getAttribute("usuario");
+
+        if (usuarioLogado == null) {
+            ra.addFlashAttribute("mensagem", "Sessão expirada ou usuário não logado. Por favor, faça login.");
+            return "redirect:/login/form"; 
+        }
+
+        
+        // 1. Se o usuário NÃO for admin
+        // 2. OU se o usuário for admin mas NÃO SELECIONOU um correntista no formulário
+        if (!usuarioLogado.isAdmin() || conta.getCorrentista() == null || conta.getCorrentista().getId() == null) {
+            // Associa a conta ao correntista logado
+            // busca o correntista completo do banco de dados para evitar
+            // TransientObjectException ao salvar a Conta no JPA.
+            Correntista correntistaCompleto = correntistaRepository.findById(usuarioLogado.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Correntista logado não encontrado!"));
+            conta.setCorrentista(correntistaCompleto);
+        } else {
+            // Se for admin e um correntista foi selecionado no formulário,
+            // associa a conta ao correntista selecionado.
+            // Também busca o correntista completo para evitar TransientObjectException.
+            Correntista correntistaSelecionado = correntistaRepository.findById(conta.getCorrentista().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Correntista selecionado não encontrado!"));
+            conta.setCorrentista(correntistaSelecionado);
+        }
+
         try {
-            return correntistaRepository.findAll();
+            contaService.save(conta);
+            ra.addFlashAttribute("mensagem", "Conta salva com sucesso!");
+            return "redirect:/contas/list"; 
         } catch (Exception e) {
-            e.printStackTrace();
-            return Collections.emptyList();
+            ra.addFlashAttribute("mensagem", "Erro ao salvar conta: " + e.getMessage());
+            return "redirect:/contas/form";
         }
     }
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public ModelAndView adicioneConta(Conta conta, ModelAndView modelAndView){
-        contaService.save(conta);
-        modelAndView.setViewName("contas/list");
-        modelAndView.addObject("contas", contaService.findall());
-        return modelAndView;
-    }
-
     @RequestMapping("/list")
-    public ModelAndView listContas(ModelAndView modelAndView) {
-        modelAndView.setViewName("contas/list");
-        modelAndView.addObject("contas", contaService.findall());
-        return modelAndView;
+    public String listContas(Model model, HttpSession session, RedirectAttributes ra) {
+        Correntista usuarioLogado = (Correntista) session.getAttribute("usuario");
+
+        if (usuarioLogado == null) {
+            ra.addFlashAttribute("mensagem", "Sessão expirada ou usuário não logado. Por favor, faça login.");
+            return "redirect:/login/form";
+        }
+
+        List<Conta> contas;
+        if (usuarioLogado.isAdmin()) {
+            contas = contaService.findall(); // Administrador vê todas as contas
+        } else {
+            // Usuário comum vê apenas suas próprias contas
+            
+            contas = contaService.findByCorrentista(usuarioLogado); 
+        }
+
+        model.addAttribute("contas", contas);
+        return "contas/list";
     }
 
     @RequestMapping
@@ -78,17 +131,61 @@ public class ContaController {
     }
 
     @GetMapping("/edit/{id}")
-    public ModelAndView getFormForEdit(@PathVariable(name = "id") Integer id, ModelAndView modelAndView) {
-        modelAndView.setViewName("/contas/form");
-        // A chamada ao findByID do ContaService aqui é adequada para edição (retorna Conta ou null)
+    public String getFormForEdit(@PathVariable(name = "id") Integer id, Model model, HttpSession session, RedirectAttributes ra) {
+        Correntista usuarioLogado = (Correntista) session.getAttribute("usuario");
+
+        if (usuarioLogado == null) {
+            ra.addFlashAttribute("mensagem", "Sessão expirada ou usuário não logado. Por favor, faça login.");
+            return "redirect:/login/form";
+        }
+
         Conta conta = contaService.findByID(id);
-        modelAndView.addObject("conta", conta);
-        return modelAndView;
+
+        if (conta == null) {
+            ra.addFlashAttribute("mensagem", "Conta não encontrada para edição.");
+            return "redirect:/contas/list";
+        }
+
+        // Verifica se o usuário logado tem permissão para editar esta conta
+        // Admins podem editar qualquer conta. Não-admins só podem editar suas próprias contas.
+        if (!usuarioLogado.isAdmin() && !conta.getCorrentista().getId().equals(usuarioLogado.getId())) {
+            ra.addFlashAttribute("mensagem", "Você não tem permissão para editar esta conta.");
+            return "redirect:/contas/list"; 
+        }
+        
+        model.addAttribute("conta", conta);
+
+        if (usuarioLogado.isAdmin()) {
+            model.addAttribute("correntistaItems", correntistaRepository.findAll());
+        }
+        return "cadastro-contas"; 
     }
 
+
     @GetMapping("/delete/{id}")
-    public String deleteConta(@PathVariable(name = "id") Integer id) {
+    public String deleteConta(@PathVariable(name = "id") Integer id, HttpSession session, RedirectAttributes ra) {
+        Correntista usuarioLogado = (Correntista) session.getAttribute("usuario");
+
+        if (usuarioLogado == null) {
+            ra.addFlashAttribute("mensagem", "Sessão expirada ou usuário não logado. Por favor, faça login.");
+            return "redirect:/login/form";
+        }
+
+        Conta conta = contaService.findByID(id);
+
+        if (conta == null) {
+            ra.addFlashAttribute("mensagem", "Conta não encontrada para exclusão.");
+            return "redirect:/contas/list";
+        }
+
+        // Verifica permissão para exclusão
+        if (!usuarioLogado.isAdmin() && !conta.getCorrentista().getId().equals(usuarioLogado.getId())) {
+            ra.addFlashAttribute("mensagem", "Você não tem permissão para excluir esta conta.");
+            return "redirect:/contas/list";
+        }
+
         contaService.deleteById(id);
+        ra.addFlashAttribute("mensagem", "Conta excluída com sucesso!");
         return "redirect:/contas/list";
     }
 
@@ -98,21 +195,33 @@ public class ContaController {
             @RequestParam(required = false) Integer mes,
             @RequestParam(required = false) String dataInicio,
             @RequestParam(required = false) String dataFim,
-            Model model) { // Model do Spring, agora importado corretamente
+            Model model,
+            HttpSession session, 
+            RedirectAttributes ra) { 
 
-        // Usando o método findById(Integer id) que retorna Optional<Conta>
-        // Este método deve estar no seu ContaService e retornar Optional
+        Correntista usuarioLogado = (Correntista) session.getAttribute("usuario");
+        if (usuarioLogado == null) {
+            ra.addFlashAttribute("mensagem", "Sessão expirada ou usuário não logado. Por favor, faça login.");
+            return "redirect:/login/form";
+        }
+
         Optional<Conta> contaOpt = contaService.findById(id);
 
         if (contaOpt.isEmpty()) {
-            return "redirect:/contas/list?error=contaNaoEncontrada";
+            ra.addFlashAttribute("mensagem", "Conta não encontrada.");
+            return "redirect:/contas/list";
         }
-        Conta conta = contaOpt.get(); // Obtém a conta do Optional
+        Conta conta = contaOpt.get();
+
+        // Verificar se o usuário logado tem permissão para ver o extrato desta conta
+        if (!usuarioLogado.isAdmin() && !conta.getCorrentista().getId().equals(usuarioLogado.getId())) {
+            ra.addFlashAttribute("mensagem", "Você não tem permissão para visualizar o extrato desta conta.");
+            return "redirect:/contas/list";
+        }
 
         LocalDate dataInicialFiltro = null;
         LocalDate dataFinalFiltro = null;
 
-        // Tenta parsear dataInicio e dataFim se não forem nulos ou vazios
         try {
             if (dataInicio != null && !dataInicio.trim().isEmpty()) {
                 dataInicialFiltro = LocalDate.parse(dataInicio);
@@ -121,25 +230,21 @@ public class ContaController {
                 dataFinalFiltro = LocalDate.parse(dataFim);
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            // Opcional: Adicionar uma mensagem de erro ao modelo para exibir na tela
-            // model.addAttribute("erroData", "Formato de data inválido. Use AAAA-MM-DD.");
+            ra.addFlashAttribute("mensagem", "Formato de data inválido. Use AAAA-MM-DD.");
+            // Redireciona de volta para o extrato da mesma conta com a mensagem de erro
+            return "redirect:/contas/" + id + "/extrato";
         }
 
-        // Se o mês for selecionado, ele tem precedência sobre as datas de início/fim
         if (mes != null) {
             YearMonth yearMonth = YearMonth.of(LocalDate.now().getYear(), mes);
             dataInicialFiltro = yearMonth.atDay(1);
             dataFinalFiltro = yearMonth.atEndOfMonth();
         }
 
-        // 1. Calcular Saldo Inicial (transações antes do período filtrado)
         BigDecimal saldoInicial = BigDecimal.ZERO;
         List<Transacao> transacoesAnteriores;
 
-        // *** CORREÇÃO AQUI: Não redeclarar transacaoRepository ***
         if (dataInicialFiltro != null) {
-            // Usa a instância de transacaoRepository que foi @Autowired no topo da classe
             transacoesAnteriores = transacaoRepository.findByContaAndDataBefore(conta, dataInicialFiltro);
         } else {
             transacoesAnteriores = Collections.emptyList();
@@ -153,19 +258,15 @@ public class ContaController {
             }
         }
 
-        // 2. Obter transações do período filtrado
         List<Transacao> transacoesPeriodo;
         if (dataInicialFiltro != null && dataFinalFiltro != null) {
             transacoesPeriodo = transacaoRepository.findByContaAndDataBetween(conta, dataInicialFiltro, dataFinalFiltro);
         } else {
-            // Se nenhum filtro de data/mês for aplicado, pega todas as transações da conta
             transacoesPeriodo = transacaoRepository.findByConta(conta);
         }
 
-        // Ordenar as transações por data para o cálculo correto do saldo parcial
         transacoesPeriodo.sort(Comparator.comparing(Transacao::getData));
 
-        // 3. Calcular Saldo Parcial para cada transação e Saldo Final
         BigDecimal saldoCorrente = saldoInicial;
         for (Transacao t : transacoesPeriodo) {
             if (t.getMovimento() == TipoMovimento.CREDITO) {
@@ -173,21 +274,19 @@ public class ContaController {
             } else {
                 saldoCorrente = saldoCorrente.subtract(t.getValor());
             }
-            t.setSaldoParcial(saldoCorrente); // Requer o campo @Transient saldoParcial em Transacao
+            t.setSaldoParcial(saldoCorrente);
         }
 
         BigDecimal saldoFinal = saldoCorrente;
 
-        // Adicionar os dados ao modelo para a view
         model.addAttribute("conta", conta);
         model.addAttribute("transacoes", transacoesPeriodo);
         model.addAttribute("saldoInicial", saldoInicial);
         model.addAttribute("saldoFinal", saldoFinal);
-        model.addAttribute("mes", mes); // Para manter o mês selecionado no formulário
-        model.addAttribute("dataInicio", dataInicio); // Para manter a data de início no formulário
-        model.addAttribute("dataFim", dataFim);     // Para manter a data de fim no formulário
+        model.addAttribute("mes", mes);
+        model.addAttribute("dataInicio", dataInicio);
+        model.addAttribute("dataFim", dataFim);
 
-        return "contas/extrato"; // Nome do seu template Thymeleaf (crie um arquivo extrato-conta.html na pasta templates)
+        return "contas/extrato";
     }
-
 }

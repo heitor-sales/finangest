@@ -49,7 +49,7 @@
                 </div>
             </div>
 
-            <div class="mb-3">
+            <div th:if="${session.usuario != null and session.usuario.admin}" class="mb-3">
                 <label for="correntista" class="form-label">Correntista</label>
                 <select th:field="*{correntista.id}" id="correntista" class="form-select" required>
                     <option value="">Selecione um Correntista</option>

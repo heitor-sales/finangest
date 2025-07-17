@@ -39,14 +39,17 @@
                 <input type="email" class="form-control" id="email" th:field="*{email}" required>
             </div>
 
-            <div class="form-check mb-3">
+            <div th:if="${session.usuario != null and session.usuario.admin}" class="form-check mb-3">
                 <input type="checkbox" class="form-check-input" id="admin" th:field="*{admin}">
-                <label class="form-check-label" for="admin">Admin?</label>
+                <label class="form-check-label" for="admin" >Admin?</label>
             </div>
             
             <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-primary">Salvar</button>
-                <a th:href="@{/correntistas/list}" class="btn btn-secondary mt-2">Cancelar / Voltar para a Lista</a>
+                <span th:if="${session.usuario != null and session.usuario.admin}">
+                    <a th:href="@{/correntistas/list}" class="btn btn-secondary mt-2">Cancelar / ir para Lista</a>
+                </span>
+                
             </div>
         </form>
     </div>
