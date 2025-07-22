@@ -23,7 +23,7 @@ public class Categoria implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String nome;
     
@@ -34,7 +34,7 @@ public class Categoria implements Serializable {
 
     private Integer ordem;  //1, 2 ou 3
 
-    private boolean ativa; //se a categoria está ativa ou não
+    private boolean ativa = true; //se a categoria está ativa ou não
    
     // private List<Transacao> transacoes;
 

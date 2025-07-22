@@ -30,6 +30,8 @@ public class Correntista implements Serializable {
 
     private boolean admin;
 
+    private boolean ativo = true;
+
     private List<Conta> contas;
 
 }

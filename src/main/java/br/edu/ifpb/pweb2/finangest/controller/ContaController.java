@@ -158,7 +158,7 @@ public String getForm(Model model, HttpSession session) {
         if (usuarioLogado.isAdmin()) {
             model.addAttribute("correntistaItems", correntistaRepository.findAll());
         }
-        return "cadastro-contas"; 
+        return "contas/form"; 
     }
 
 

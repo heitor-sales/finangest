@@ -1,52 +1,37 @@
 /* Estilos gerais do corpo da página */
 body {
-    background-color: #f8f9fa; /* Cor de fundo suave */
-    color: #343a40; /* Cor de texto principal */
+    background-color: #f8f9fa;
+    color: #010101;
     font-family: -apple-system, BlinkMacSyste, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     margin: 0;
     padding: 0;
+
+    /* --- NOVAS PROPRIEDADES PARA CENTRALIZAÇÃO --- */
+    display: flex; 
+    flex-direction: column; 
+    min-height: 100vh; 
+   
 }
 
 /* Estilo para a barra de navegação (cabeçalho) */
 .navbar {
-    background-color: #343a40; /* Cor escura de fundo para o cabeçalho */
+    
+    background-color: #343a40;
     padding: 1rem;
+   
 }
-
-/* Estilo para o nome do site (marca) no cabeçalho */
-.navbar-brand {
+.navbar p, .navbar span, .navbar a { 
     color: #ffffff;
-    font-weight: 600;
 }
 
-/* Estilo para os links de navegação */
-.nav-link {
-    color: rgba(255, 255, 255, 0.7); /* Cor do link */
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
 
-.nav-link:hover {
-    color: #ffffff; /* Cor do link ao passar o mouse */
-}
 
-/* Estilo para o nome do usuário logado no cabeçalho */
-.navbar-nav span {
-    color: #ffffff;
-    font-weight: 600;
-    padding: 0.5rem 1rem;
-    align-self: center; /* Alinha o texto no centro */
-}
 
-/* Estilo para o botão "Sair" */
 .logout-button {
-    /* Posicionamento */
-    position: fixed;
+    position: fixed; 
     top: 20px;
     right: 20px;
-    z-index: 1000; /* Garante que o botão fique na frente de outros elementos */
-
-    /* Estilo básico para o botão */
+    z-index: 1000;
     background-color: transparent;
     border: 2px solid #dc3545;
     color: #dc3545;
@@ -54,11 +39,10 @@ body {
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
-    text-decoration: none; /* Caso seja uma tag <a> */
+    text-decoration: none;
 }
 
 .logout-button:hover {
-    
     background-color: #dc3545;
     color: #ffffff;
 }
@@ -66,44 +50,16 @@ body {
 /* Estilo para o contêiner principal da página */
 .main-content-container {
     max-width: 900px;
-    margin: 3rem auto; /* Centraliza e adiciona espaço vertical */
+    width: 90%; 
+    margin: auto; 
+
+    display: flex;
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center;
     padding: 2rem;
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilo para o título */
-h1 {
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-}
-
-/* Estilo para a linha horizontal */
-hr {
-    border-top: 2px solid #e9ecef;
-    margin-top: 0.5rem;
-    margin-bottom: 2rem;
-}
-
-/* Estilo para o contêiner dos links principais */
-.nav-links {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-}
-
-/* Estilo para o texto do rodapé */
-.footer-text {
-    text-align: center;
-    color: #6c757d;
-    font-style: italic;
-    margin-top: 3rem;
-}
-
-.user-email {
-    color: #ffffff;
-    font-weight: 500;
-}

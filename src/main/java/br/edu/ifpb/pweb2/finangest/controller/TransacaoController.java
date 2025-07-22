@@ -31,11 +31,11 @@ public class TransacaoController {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
-    // Método para exibir o formulário de nova transação ou edição
+    
     @GetMapping("/form")
     public ModelAndView getForm(@RequestParam(name = "contaId", required = false) Integer contaId, ModelAndView modelAndView) {
         modelAndView.setViewName("transacoes/form");
-        Transacao transacao = new Transacao(); // Cria uma nova transação
+        Transacao transacao = new Transacao(); 
 
         // Se um contaId for fornecido (ao clicar em "Registrar Nova Transação" no extrato)
         if (contaId != null) {
@@ -55,7 +55,7 @@ public class TransacaoController {
             // Caso acesse /transacoes/form diretamente sem contaId,
             // o campo de seleção de conta no futuro formulário seria necessário.
             // Para este cenário, como o link vem do extrato, é esperado que `contaId` esteja presente.
-            // Se você quiser permitir adicionar transações sem um contaId inicial,
+            // Se quiser permitir adicionar transações sem um contaId inicial,
             // precisaria adicionar um campo de seleção de conta no formulário.
             // Por enquanto, inicializa uma conta vazia para evitar NullPointerException no Thymeleaf.
             transacao.setConta(new Conta());
@@ -93,9 +93,7 @@ public class TransacaoController {
         }
         // --- FIM DA VALIDAÇÃO DO SPRING VALIDATION ---
 
-        // As validações de Conta e Categoria que você já tinha podem ser mantidas,
-        // mas considere se algumas delas podem ser expressas com anotações de validação
-        // para maior consistência.
+        
 
         // Validação da Conta (mantida, mas pode ser complementada com @NotNull ou @Valid na Transacao)
         if (transacao.getConta() == null || transacao.getConta().getId() == null) {
@@ -131,8 +129,7 @@ public class TransacaoController {
                 }
             );
 
-        // Lidar com o Comentario: Se o texto do comentário estiver vazio, defina o objeto Comentario como null
-        // para evitar salvar um Comentario vazio no banco, já que é @OneToOne.
+       
         if (transacao.getComentario() != null && (transacao.getComentario().getTexto() == null || transacao.getComentario().getTexto().trim().isEmpty())) {
             transacao.setComentario(null);
         } else if (transacao.getComentario() != null && transacao.getComentario().getId() != null) {
